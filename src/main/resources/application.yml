@@ -1,0 +1,41 @@
+spring:
+  data:
+    mongodb:
+      #username: root
+      #password: root
+      database: rule
+      port: 27017
+      host: localhost
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: iot.edge.topic
+          binder: rabbit
+          group: rule-engine-consumer-group
+      rabbit:
+        bindings:
+          input:
+            consumer:
+              queueNameGroupOnly: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    password: guest
+    username: guest
+
+
+---
+spring:
+  profiles: docker-compose
+  data:
+    mongodb:
+      #username: root
+      #password: root
+      database: rule
+      port: 27017
+      host: mongodb
+  rabbitmq:
+    host: rabbitmq
+    password: guest
+    username: guest
