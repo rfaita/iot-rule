@@ -16,9 +16,10 @@ public class RuleRepositoryImpl implements RuleRepository {
     }
 
     @Override
-    public List<Rule> findAllByCustomerId(String customerId) {
+    public List<Rule> findAllByCustomerIdAndDeviceId(String customerId, String deviceId) {
 
-        return this.ruleRepresentationRepository.findAllByCustomerId(customerId)
+        return this.ruleRepresentationRepository
+                .findAllByCustomerIdAndDeviceId(customerId, deviceId)
                 .stream()
                 .map(RuleRepresentation::toRule)
                 .collect(Collectors.toList());

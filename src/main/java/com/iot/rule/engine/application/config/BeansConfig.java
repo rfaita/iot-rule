@@ -1,5 +1,7 @@
 package com.iot.rule.engine.application.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iot.rule.engine.application.repository.RuleNotificationRepository;
 import com.iot.rule.engine.application.repository.RuleObservableRepositoryImpl;
 import com.iot.rule.engine.application.repository.RuleRepositoryImpl;
@@ -29,6 +31,4 @@ public class BeansConfig {
     public RuleObservableRepository ruleObservableRepository(RuleNotificationRepository ruleNotificationRepository) {
         return new RuleObservableRepositoryImpl(ruleNotificationRepository);
     }
-
-
 }

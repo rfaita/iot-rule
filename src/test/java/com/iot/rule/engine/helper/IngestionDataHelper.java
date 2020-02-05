@@ -24,10 +24,10 @@ public class IngestionDataHelper {
 
         Map<String, Object> data = new HashMap<>();
 
-        data.put("numericTest", numericValue != null ? new BigDecimal(numericValue) : numericValue);
+        data.put("numericTest", numericValue);
         data.put("stringTest", stringValue);
 
-        return new IngestionData("", 0l, "customerId", data);
+        return new IngestionData("deviceId", 0l, "customerId", data);
     }
 
 }

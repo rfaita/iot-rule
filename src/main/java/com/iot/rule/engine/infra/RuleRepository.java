@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface RuleRepository {
 
-    List<Rule> findAllByCustomerId(String customerId);
+    List<Rule> findAllByCustomerIdAndDeviceId(String customerId, String deviceId);
 
 }

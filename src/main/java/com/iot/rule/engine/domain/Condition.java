@@ -3,6 +3,10 @@ package com.iot.rule.engine.domain;
 import com.iot.rule.engine.domain.operator.Operator;
 import com.iot.rule.engine.domain.operator.OperatorType;
 
+import java.math.BigDecimal;
+
+import static com.iot.rule.engine.domain.helper.ConverterHelper.convertToBigDecimal;
+
 public class Condition<T> {
 
     private final Operator operator;
@@ -16,9 +20,11 @@ public class Condition<T> {
     }
 
     public Boolean apply(IngestionData data) {
-
-        return operator.apply((T) data.getField(this.field), value);
-
+        Object fieldValue = data.getField(this.field);
+        if (fieldValue instanceof Number) {
+            return operator.apply((T) convertToBigDecimal(fieldValue), value);
+        }
+        return operator.apply((T) fieldValue, value);
     }
 
     public static <T> Builder<T> builder() {

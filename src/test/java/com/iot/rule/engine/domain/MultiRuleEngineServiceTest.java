@@ -39,7 +39,7 @@ public class MultiRuleEngineServiceTest {
         given(condition.apply(any())).willReturn(Boolean.TRUE);
         given(conditionNotApplied.apply(any())).willReturn(Boolean.FALSE);
 
-        given(ruleRepository.findAllByCustomerId("customerId"))
+        given(ruleRepository.findAllByCustomerIdAndDeviceId("customerId", "deviceId"))
                 .willReturn(Arrays.asList(
                         new Rule("x", Arrays.asList(condition)),
                         new Rule("y", Arrays.asList(conditionNotApplied))
@@ -58,7 +58,7 @@ public class MultiRuleEngineServiceTest {
     public void multi_condition_rule() {
         this.ruleEngineService.applyRules(createNumericIngestionData(1));
 
-        verify(this.ruleRepository, times(1)).findAllByCustomerId("customerId");
+        verify(this.ruleRepository, times(1)).findAllByCustomerIdAndDeviceId("customerId", "deviceId");
         verify(this.notificationRepository, times(1)).findAllByRuleId("x");
         verify(this.notificationRepository, times(1)).findAllByRuleId("y");
         verify(this.condition, times(1)).apply(any());

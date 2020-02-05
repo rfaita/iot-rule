@@ -34,7 +34,7 @@ public class UnsuccessRuleEngineServiceTest {
 
         given(condition.apply(any())).willReturn(Boolean.FALSE);
 
-        given(ruleRepository.findAllByCustomerId("customerId"))
+        given(ruleRepository.findAllByCustomerIdAndDeviceId("customerId", "deviceId"))
                 .willReturn(Arrays.asList(new Rule("x", Arrays.asList(condition))));
         given(ruleObservableRepository.findAllByRuleId(any()))
                 .willReturn(Arrays.asList(ruleObservable));
@@ -47,7 +47,7 @@ public class UnsuccessRuleEngineServiceTest {
     public void one_condition_rule() {
         this.ruleEngineService.applyRules(createNumericIngestionData(1));
 
-        verify(this.ruleRepository, times(1)).findAllByCustomerId("customerId");
+        verify(this.ruleRepository, times(1)).findAllByCustomerIdAndDeviceId("customerId", "deviceId");
         verify(this.ruleObservableRepository, times(1)).findAllByRuleId("x");
         verify(this.condition, times(1)).apply(any());
         verify(this.ruleObservable, times(0)).apply(any());

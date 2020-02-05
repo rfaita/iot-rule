@@ -20,7 +20,10 @@ public class RuleEngineServiceImpl implements RuleEngineService {
     @Override
     public void applyRules(final IngestionData ingestionData) {
 
-        List<Rule> rules = ruleRepository.findAllByCustomerId(ingestionData.getCustomerId());
+        List<Rule> rules = ruleRepository.findAllByCustomerIdAndDeviceId(
+                ingestionData.getCustomerId(),
+                ingestionData.getDeviceId()
+        );
         rules.stream()
                 .peek(rule -> rule.addObservers(notificationRepository.findAllByRuleId(rule.getId())))
                 .peek(rule -> rule.apply(ingestionData))

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface RuleRepresentationRepository extends MongoRepository<RuleRepresentation, String> {
 
-    List<RuleRepresentation> findAllByCustomerId(String customerId);
+    List<RuleRepresentation> findAllByCustomerIdAndDeviceId(String customerId, String deviceId);
 }
