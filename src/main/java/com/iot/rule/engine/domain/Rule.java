@@ -41,8 +41,7 @@ public class Rule {
             conditionsResult &= condition.apply(data);
         }
 
-        if (conditionsResult && verifyRuneInBounceTime()) {
-
+        if (conditionsResult && !verifyRuleInBounceTime()) {
             setLastConditionReachedTime();
 
             notifyObserves(data);
@@ -50,35 +49,39 @@ public class Rule {
 
     }
 
-    private Boolean verifyRuneInBounceTime() {
-        if (this.bounceTime != null) {
-            return this.lastConditionReachedTime + this.bounceTime.getMilliseconds() < currentTimeMillis();
+    private Boolean verifyRuleInBounceTime() {
+        if (this.bounceTime != null && this.lastConditionReachedTime != null) {
+            return this.lastConditionReachedTime + this.bounceTime.getMilliseconds() >= currentTimeMillis();
         }
-        return Boolean.TRUE;
+        return Boolean.FALSE;
     }
 
     private void setLastConditionReachedTime() {
         this.lastConditionReachedTime = currentTimeMillis();
 
-        notifyBounceTimeObserves(this.lastConditionReachedTime);
+        notifyBounceTimeObserves(this);
 
     }
 
+    public void restoreLastConditionReachedTime(Long lastConditionReachedTime) {
+        this.lastConditionReachedTime = lastConditionReachedTime;
+    }
 
-    public void addRuleBounceObservers(List<? extends RuleBounceTimeObservable> ruleBounceTimeObservables) {
+
+    public void addBounceObservers(List<? extends RuleBounceTimeObservable> ruleBounceTimeObservables) {
         if (ruleBounceTimeObservables != null) {
             this.ruleBounceTimeObservables.addAll(ruleBounceTimeObservables);
         }
     }
 
-    public void addRuleBounceObserver(RuleBounceTimeObservable ruleBounceTimeObservable) {
+    public void addBounceObserver(RuleBounceTimeObservable ruleBounceTimeObservable) {
         this.ruleBounceTimeObservables.add(ruleBounceTimeObservable);
     }
 
 
-    private void notifyBounceTimeObserves(final Long lastConditionReachedTime) {
+    private void notifyBounceTimeObserves(Rule rule) {
         this.ruleBounceTimeObservables
-                .forEach(ruleBounceTimeObservable -> ruleBounceTimeObservable.apply(lastConditionReachedTime));
+                .forEach(ruleBounceTimeObservable -> ruleBounceTimeObservable.apply(rule));
     }
 
     public void addObservers(List<? extends RuleObservable> ruleObservables) {
@@ -97,4 +100,7 @@ public class Rule {
 
     }
 
+    public Long getLastConditionReachedTime() {
+        return lastConditionReachedTime;
+    }
 }
