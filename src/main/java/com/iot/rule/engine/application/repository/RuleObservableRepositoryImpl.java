@@ -1,6 +1,6 @@
 package com.iot.rule.engine.application.repository;
 
-import com.iot.rule.engine.application.observers.LogNotificationObserver;
+import com.iot.rule.engine.application.observers.LogObserver;
 import com.iot.rule.engine.application.observers.NotificationObserver;
 import com.iot.rule.engine.domain.RuleObservable;
 import com.iot.rule.engine.infra.RuleObservableRepository;
@@ -20,7 +20,7 @@ public class RuleObservableRepositoryImpl implements RuleObservableRepository {
     public List<RuleObservable> findAllByRuleId(String ruleId) {
         return Arrays.asList(
                 new NotificationObserver(this.ruleNotificationRepository.findAllByRuleId(ruleId)),
-                new LogNotificationObserver()
+                new LogObserver()
         );
     }
 }
