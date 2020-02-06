@@ -34,6 +34,10 @@ public class Rule {
         return id;
     }
 
+    public Boolean hasBounceTime() {
+        return this.bounceTime != null;
+    }
+
     public void apply(final IngestionData data) {
 
         Boolean conditionsResult = Boolean.TRUE;
@@ -68,14 +72,16 @@ public class Rule {
     }
 
 
-    public void addBounceObservers(List<? extends RuleBounceTimeObservable> ruleBounceTimeObservables) {
+    public Rule addBounceObservers(List<? extends RuleBounceTimeObservable> ruleBounceTimeObservables) {
         if (ruleBounceTimeObservables != null) {
             this.ruleBounceTimeObservables.addAll(ruleBounceTimeObservables);
         }
+        return this;
     }
 
-    public void addBounceObserver(RuleBounceTimeObservable ruleBounceTimeObservable) {
+    public Rule addBounceObserver(RuleBounceTimeObservable ruleBounceTimeObservable) {
         this.ruleBounceTimeObservables.add(ruleBounceTimeObservable);
+        return this;
     }
 
 
@@ -84,14 +90,16 @@ public class Rule {
                 .forEach(ruleBounceTimeObservable -> ruleBounceTimeObservable.apply(rule));
     }
 
-    public void addObservers(List<? extends RuleObservable> ruleObservables) {
+    public Rule addObservers(List<? extends RuleObservable> ruleObservables) {
         if (ruleObservables != null) {
             this.ruleObservables.addAll(ruleObservables);
         }
+        return this;
     }
 
-    public void addObserver(RuleObservable ruleObservable) {
+    public Rule addObserver(RuleObservable ruleObservable) {
         this.ruleObservables.add(ruleObservable);
+        return this;
     }
 
     private void notifyObserves(final IngestionData data) {

@@ -1,6 +1,7 @@
 package com.iot.rule.engine.domain;
 
 import com.iot.rule.engine.helper.IngestionDataHelper;
+import com.iot.rule.engine.infra.LastConditionReachedTimeRepository;
 import com.iot.rule.engine.infra.RuleObservableRepository;
 import com.iot.rule.engine.infra.RuleEngineService;
 import com.iot.rule.engine.infra.RuleRepository;
@@ -22,6 +23,7 @@ public class SuccessRuleEngineServiceTest {
 
     private Condition condition;
     private RuleObservable ruleObservable;
+    private LastConditionReachedTimeRepository lastConditionReachedTimeRepository;
 
     @BeforeEach
     public void setUp() {
@@ -31,15 +33,18 @@ public class SuccessRuleEngineServiceTest {
 
         this.ruleRepository = mock(RuleRepository.class);
         this.notificationRepository = mock(RuleObservableRepository.class);
-
         given(condition.apply(any())).willReturn(Boolean.TRUE);
+        this.lastConditionReachedTimeRepository = mock(LastConditionReachedTimeRepository.class);
 
         given(ruleRepository.findAllByCustomerIdAndDeviceId("customerId", "deviceId"))
                 .willReturn(Arrays.asList(new Rule("x", Arrays.asList(condition))));
         given(notificationRepository.findAllByRuleId(any()))
                 .willReturn(Arrays.asList(ruleObservable));
 
-        this.ruleEngineService = new RuleEngineServiceImpl(ruleRepository, notificationRepository);
+        this.ruleEngineService = new RuleEngineServiceImpl(
+                ruleRepository,
+                notificationRepository,
+                lastConditionReachedTimeRepository);
 
     }
 

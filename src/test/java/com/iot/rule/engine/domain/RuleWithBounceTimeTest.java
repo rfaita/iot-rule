@@ -49,12 +49,21 @@ public class RuleWithBounceTimeTest {
     }
 
     @Test
-    public void apply_bounce_time_with_waiting_1_secs() throws Exception {
+    public void apply_bounce_time_with_waiting_1010_millisecs() throws Exception {
         rule.apply(createNumericIngestionData(2));
         Thread.sleep(1010);
         rule.apply(createNumericIngestionData(2));
         verify(ruleObservable, times(2)).apply(any());
         verify(ruleBounceTimeObservable, times(2)).apply(any());
+    }
+
+    @Test
+    public void apply_bounce_time_with_waiting_990_millisecs() throws Exception {
+        rule.apply(createNumericIngestionData(2));
+        Thread.sleep(990);
+        rule.apply(createNumericIngestionData(2));
+        verify(ruleObservable, times(1)).apply(any());
+        verify(ruleBounceTimeObservable, times(1)).apply(any());
     }
 
 }
