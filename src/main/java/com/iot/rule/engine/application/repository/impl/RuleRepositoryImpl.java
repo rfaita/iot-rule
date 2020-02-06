@@ -1,6 +1,7 @@
-package com.iot.rule.engine.application.repository;
+package com.iot.rule.engine.application.repository.impl;
 
 import com.iot.rule.engine.application.model.RuleRepresentation;
+import com.iot.rule.engine.application.repository.RuleRepresentationRepository;
 import com.iot.rule.engine.domain.Rule;
 import com.iot.rule.engine.infra.RuleRepository;
 

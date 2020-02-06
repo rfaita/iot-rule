@@ -1,4 +1,4 @@
-package com.iot.rule.engine.application.repository;
+package com.iot.rule.engine.application.repository.impl;
 
 import com.iot.rule.engine.infra.LastReachedTimeRepository;
 
