@@ -1,20 +1,25 @@
 package com.iot.rule.engine.domain;
 
+import com.iot.rule.engine.domain.Condition;
+import com.iot.rule.engine.domain.Rule;
+import com.iot.rule.engine.domain.RuleEngineServiceImpl;
+import com.iot.rule.engine.domain.RuleObservable;
 import com.iot.rule.engine.helper.IngestionDataHelper;
 import com.iot.rule.engine.infra.LastReachedTimeRepository;
-import com.iot.rule.engine.infra.RuleObservableRepository;
 import com.iot.rule.engine.infra.RuleEngineService;
+import com.iot.rule.engine.infra.RuleObservableRepository;
 import com.iot.rule.engine.infra.RuleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-public class SuccessRuleEngineServiceTest {
+public class BounceRuleEngineServiceTest {
 
     private RuleEngineService ruleEngineService;
 
@@ -37,7 +42,7 @@ public class SuccessRuleEngineServiceTest {
         this.lastReachedTimeRepository = mock(LastReachedTimeRepository.class);
 
         given(ruleRepository.findAllByCustomerIdAndDeviceId("customerId", "deviceId"))
-                .willReturn(Arrays.asList(new Rule("x", Arrays.asList(condition))));
+                .willReturn(Arrays.asList(new Rule("x", Arrays.asList(condition), Second.of(1))));
         given(notificationRepository.findAllByRuleId(any()))
                 .willReturn(Arrays.asList(ruleObservable));
 
@@ -49,15 +54,21 @@ public class SuccessRuleEngineServiceTest {
     }
 
     @Test
-    public void one_condition_rule() {
+    public void bounce_rule_test() {
         this.ruleEngineService.applyRules(IngestionDataHelper.createNumericIngestionData(1));
 
-        verify(this.ruleRepository, times(1))
+        given(lastReachedTimeRepository.findByRuleId("x")).willReturn(Optional.of(System.currentTimeMillis()));
+
+        this.ruleEngineService.applyRules(IngestionDataHelper.createNumericIngestionData(1));
+
+
+        verify(this.ruleRepository, times(2))
                 .findAllByCustomerIdAndDeviceId("customerId", "deviceId");
-        verify(this.notificationRepository, times(1)).findAllByRuleId("x");
-        verify(this.condition, times(1)).apply(any());
+        verify(this.notificationRepository, times(2)).findAllByRuleId("x");
+        verify(this.condition, times(2)).apply(any());
         verify(this.ruleObservable, times(1)).apply(any());
-        verify(this.lastReachedTimeRepository, times(0)).findByRuleId(any());
+        verify(this.lastReachedTimeRepository, times(2)).findByRuleId("x");
+        verify(this.lastReachedTimeRepository, times(1)).save(eq("x"), any(Long.class));
 
     }
 }

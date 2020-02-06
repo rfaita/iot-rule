@@ -1,11 +1,8 @@
 package com.iot.rule.engine.application.config;
 
-import com.iot.rule.engine.application.repository.RuleNotificationRepository;
-import com.iot.rule.engine.application.repository.RuleObservableRepositoryImpl;
-import com.iot.rule.engine.application.repository.RuleRepositoryImpl;
-import com.iot.rule.engine.application.repository.RuleRepresentationRepository;
+import com.iot.rule.engine.application.repository.*;
 import com.iot.rule.engine.domain.RuleEngineServiceImpl;
-import com.iot.rule.engine.infra.LastConditionReachedTimeRepository;
+import com.iot.rule.engine.infra.LastReachedTimeRepository;
 import com.iot.rule.engine.infra.RuleObservableRepository;
 import com.iot.rule.engine.infra.RuleEngineService;
 import com.iot.rule.engine.infra.RuleRepository;
@@ -18,10 +15,10 @@ public class BeansConfig {
     @Bean
     public RuleEngineService ruleEngineService(RuleRepository ruleRepository,
                                                RuleObservableRepository notificationRepository,
-                                               LastConditionReachedTimeRepository lastConditionReachedTimeRepository) {
+                                               LastReachedTimeRepository lastReachedTimeRepository) {
         return new RuleEngineServiceImpl(ruleRepository,
                 notificationRepository,
-                lastConditionReachedTimeRepository);
+                lastReachedTimeRepository);
     }
 
     @Bean
@@ -32,5 +29,10 @@ public class BeansConfig {
     @Bean
     public RuleObservableRepository ruleObservableRepository(RuleNotificationRepository ruleNotificationRepository) {
         return new RuleObservableRepositoryImpl(ruleNotificationRepository);
+    }
+
+    @Bean
+    public LastReachedTimeRepository lastConditionReachedTimeRepository(){
+        return new InMemoryLastReachedTimeRepositoryImpl();
     }
 }

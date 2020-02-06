@@ -1,6 +1,6 @@
 package com.iot.rule.engine.domain;
 
-import com.iot.rule.engine.infra.LastConditionReachedTimeRepository;
+import com.iot.rule.engine.infra.LastReachedTimeRepository;
 import com.iot.rule.engine.infra.RuleRepository;
 import com.iot.rule.engine.infra.RuleObservableRepository;
 import com.iot.rule.engine.infra.RuleEngineService;
@@ -23,7 +23,7 @@ public class UnsuccessRuleEngineServiceTest {
 
     private Condition condition;
     private RuleObservable ruleObservable;
-    private LastConditionReachedTimeRepository lastConditionReachedTimeRepository;
+    private LastReachedTimeRepository lastReachedTimeRepository;
 
     @BeforeEach
     public void setUp() {
@@ -33,7 +33,7 @@ public class UnsuccessRuleEngineServiceTest {
 
         this.ruleRepository = mock(RuleRepository.class);
         this.ruleObservableRepository = mock(RuleObservableRepository.class);
-        this.lastConditionReachedTimeRepository = mock(LastConditionReachedTimeRepository.class);
+        this.lastReachedTimeRepository = mock(LastReachedTimeRepository.class);
 
         given(condition.apply(any())).willReturn(Boolean.FALSE);
 
@@ -45,7 +45,7 @@ public class UnsuccessRuleEngineServiceTest {
         this.ruleEngineService = new RuleEngineServiceImpl(
                 ruleRepository,
                 ruleObservableRepository,
-                lastConditionReachedTimeRepository);
+                lastReachedTimeRepository);
 
     }
 
@@ -57,6 +57,7 @@ public class UnsuccessRuleEngineServiceTest {
         verify(this.ruleObservableRepository, times(1)).findAllByRuleId("x");
         verify(this.condition, times(1)).apply(any());
         verify(this.ruleObservable, times(0)).apply(any());
+        verify(this.lastReachedTimeRepository, times(0)).findByRuleId(any());
 
     }
 }

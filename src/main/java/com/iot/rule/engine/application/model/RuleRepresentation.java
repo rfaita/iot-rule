@@ -2,6 +2,7 @@ package com.iot.rule.engine.application.model;
 
 import com.iot.rule.engine.domain.Condition;
 import com.iot.rule.engine.domain.Rule;
+import com.iot.rule.engine.domain.Second;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,6 +17,7 @@ public class RuleRepresentation {
     private String deviceId;
     private String customerId;
     private List<ConditionRepresentation> conditions;
+    private Second bounceTime;
 
     public String getId() {
         return id;
@@ -49,11 +51,19 @@ public class RuleRepresentation {
         this.conditions = conditions;
     }
 
+    public Second getBounceTime() {
+        return bounceTime;
+    }
+
+    public void setBounceTime(Second bounceTime) {
+        this.bounceTime = bounceTime;
+    }
+
     public Rule toRule() {
         List<Condition> conditions = this.conditions
                 .stream()
                 .map(ConditionRepresentation::toCondition)
                 .collect(Collectors.toList());
-        return new Rule(this.getId(), conditions);
+        return new Rule(this.getId(), conditions, this.getBounceTime());
     }
 }

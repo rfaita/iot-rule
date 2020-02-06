@@ -2,6 +2,7 @@ package com.iot.rule.engine.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.iot.rule.engine.domain.helper.TimeHelper.currentTimeMillis;
 
@@ -12,7 +13,7 @@ public class Rule {
     private final List<RuleObservable> ruleObservables;
     private final List<RuleBounceTimeObservable> ruleBounceTimeObservables;
     private final Second bounceTime;
-    private Long lastConditionReachedTime;
+    private Long lastReachedTime;
 
     public Rule(final String id, final List<Condition> conditions, Second bounceTime) {
         this.id = id;
@@ -46,7 +47,7 @@ public class Rule {
         }
 
         if (conditionsResult && !verifyRuleInBounceTime()) {
-            setLastConditionReachedTime();
+            setLastReachedTime();
 
             notifyObserves(data);
         }
@@ -54,21 +55,22 @@ public class Rule {
     }
 
     private Boolean verifyRuleInBounceTime() {
-        if (this.bounceTime != null && this.lastConditionReachedTime != null) {
-            return this.lastConditionReachedTime + this.bounceTime.getMilliseconds() >= currentTimeMillis();
+        if (this.bounceTime != null && this.lastReachedTime != null) {
+            return this.lastReachedTime + this.bounceTime.getMilliseconds() >= currentTimeMillis();
         }
         return Boolean.FALSE;
     }
 
-    private void setLastConditionReachedTime() {
-        this.lastConditionReachedTime = currentTimeMillis();
+    private void setLastReachedTime() {
+        this.lastReachedTime = currentTimeMillis();
 
         notifyBounceTimeObserves(this);
 
     }
 
-    public void restoreLastConditionReachedTime(Long lastConditionReachedTime) {
-        this.lastConditionReachedTime = lastConditionReachedTime;
+    public Rule restoreLastReachedTime(Optional<Long> lastReachedTime) {
+        this.lastReachedTime = lastReachedTime.orElse(null);
+        return this;
     }
 
 
@@ -108,7 +110,7 @@ public class Rule {
 
     }
 
-    public Long getLastConditionReachedTime() {
-        return lastConditionReachedTime;
+    public Long getLastReachedTime() {
+        return lastReachedTime;
     }
 }

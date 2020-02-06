@@ -1,6 +1,6 @@
 package com.iot.rule.engine.domain;
 
-import com.iot.rule.engine.infra.LastConditionReachedTimeRepository;
+import com.iot.rule.engine.infra.LastReachedTimeRepository;
 import com.iot.rule.engine.infra.RuleObservableRepository;
 import com.iot.rule.engine.infra.RuleEngineService;
 import com.iot.rule.engine.infra.RuleRepository;
@@ -25,7 +25,7 @@ public class MultiRuleEngineServiceTest {
     private Condition conditionNotApplied;
     private RuleObservable ruleObservable;
     private RuleObservable ruleObservableNotApplied;
-    private LastConditionReachedTimeRepository lastConditionReachedTimeRepository;
+    private LastReachedTimeRepository lastReachedTimeRepository;
 
     @BeforeEach
     public void setUp() {
@@ -37,7 +37,7 @@ public class MultiRuleEngineServiceTest {
 
         this.ruleRepository = mock(RuleRepository.class);
         this.notificationRepository = mock(RuleObservableRepository.class);
-        this.lastConditionReachedTimeRepository = mock(LastConditionReachedTimeRepository.class);
+        this.lastReachedTimeRepository = mock(LastReachedTimeRepository.class);
 
         given(condition.apply(any())).willReturn(Boolean.TRUE);
         given(conditionNotApplied.apply(any())).willReturn(Boolean.FALSE);
@@ -56,7 +56,7 @@ public class MultiRuleEngineServiceTest {
         this.ruleEngineService = new RuleEngineServiceImpl(
                 ruleRepository,
                 notificationRepository,
-                lastConditionReachedTimeRepository);
+                lastReachedTimeRepository);
 
     }
 

@@ -4,6 +4,7 @@ import com.iot.rule.engine.application.model.NumericConditionRepresentation;
 import com.iot.rule.engine.application.model.RuleRepresentation;
 import com.iot.rule.engine.application.repository.RuleRepresentationRepository;
 import com.iot.rule.engine.domain.Condition;
+import com.iot.rule.engine.domain.Second;
 import com.iot.rule.engine.domain.operator.OperatorType;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -33,6 +34,7 @@ public class RuleEngineApplication implements CommandLineRunner {
 		rp.setId("1");
 		rp.setCustomerId("1");
 		rp.setDeviceId("1");
+		rp.setBounceTime(Second.of(5));
 		rp.setConditions(Arrays.asList(condition));
 
 		this.repository.save(rp);
