@@ -1,7 +1,7 @@
 package com.iot.rule.engine.application.config;
 
 import com.iot.rule.engine.application.repository.*;
-import com.iot.rule.engine.application.repository.impl.InMemoryLastReachedTimeRepositoryImpl;
+import com.iot.rule.engine.application.repository.impl.LastReachedTimeRepositoryImpl;
 import com.iot.rule.engine.application.repository.impl.RuleObservableRepositoryImpl;
 import com.iot.rule.engine.application.repository.impl.RuleRepositoryImpl;
 import com.iot.rule.engine.domain.RuleEngineServiceImpl;
@@ -11,6 +11,7 @@ import com.iot.rule.engine.infra.RuleEngineService;
 import com.iot.rule.engine.infra.RuleRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 public class BeansConfig {
@@ -35,7 +36,8 @@ public class BeansConfig {
     }
 
     @Bean
-    public LastReachedTimeRepository lastConditionReachedTimeRepository(){
-        return new InMemoryLastReachedTimeRepositoryImpl();
+    public LastReachedTimeRepository lastConditionReachedTimeRepository(
+            RedisTemplate<String, Long> redisTemplate){
+        return new LastReachedTimeRepositoryImpl(redisTemplate);
     }
 }
