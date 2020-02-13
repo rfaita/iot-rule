@@ -14,12 +14,12 @@ public class GreaterNumericRuleTest {
 
     private Rule rule;
 
-    private RuleObservable ruleObservable;
+    private RuleObserver ruleObserver;
 
     @BeforeEach
     public void setUp() {
 
-        this.ruleObservable = mock(RuleObservable.class);
+        this.ruleObserver = mock(RuleObserver.class);
 
         Condition<BigDecimal> condition =
                 Condition.<BigDecimal>builder()
@@ -29,33 +29,33 @@ public class GreaterNumericRuleTest {
                         .build();
 
         rule = new Rule("x", Arrays.asList(condition));
-        rule.addObserver(this.ruleObservable);
+        rule.addObserver(this.ruleObserver);
 
     }
 
     @Test
     public void apply_numeric_rule_lower_number() {
         rule.apply(IngestionDataHelper.createNumericIngestionData(1));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void apply_numeric_rule_equals_number() {
         rule.apply(IngestionDataHelper.createNumericIngestionData(2));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void apply_numeric_rule_greater_number() {
         rule.apply(IngestionDataHelper.createNumericIngestionData(3));
-        verify(ruleObservable, times(1)).apply(any());
+        verify(ruleObserver, times(1)).apply(any());
     }
 
 
     @Test
     public void apply_numeric_rule_null_value() {
         rule.apply(IngestionDataHelper.createNumericIngestionData((Integer)null));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
 

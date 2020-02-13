@@ -2,7 +2,7 @@ package com.iot.rule.engine.domain;
 
 import com.iot.rule.engine.infra.LastReachedTimeRepository;
 
-class PersistentRuleBounceTimeObserver implements RuleBounceTimeObservable {
+class PersistentRuleBounceTimeObserver implements RuleBounceTimeObserver {
 
     private final LastReachedTimeRepository repository;
 

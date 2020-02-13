@@ -1,6 +1,6 @@
 package com.iot.rule.engine.domain;
 
-public interface RuleBounceTimeObservable {
+public interface RuleBounceTimeObserver {
 
     void apply(Rule data);
 

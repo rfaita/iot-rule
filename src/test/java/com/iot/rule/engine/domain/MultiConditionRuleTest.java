@@ -14,12 +14,12 @@ public class MultiConditionRuleTest {
 
     private Rule rule;
 
-    private RuleObservable ruleObservable;
+    private RuleObserver ruleObserver;
 
     @BeforeEach
     public void setUp() {
 
-        this.ruleObservable = mock(RuleObservable.class);
+        this.ruleObserver = mock(RuleObserver.class);
 
         Condition<BigDecimal> numericCondition =
                 Condition.<BigDecimal>builder()
@@ -36,50 +36,50 @@ public class MultiConditionRuleTest {
                         .build();
 
         rule = new Rule("x", Arrays.asList(stringCondition, numericCondition));
-        rule.addObserver(this.ruleObservable);
+        rule.addObserver(this.ruleObserver);
 
     }
 
     @Test
     public void multi_condition_equals_values() {
         rule.apply(createDefaultIngestionData(2, "test"));
-        verify(ruleObservable, times(1)).apply(any());
+        verify(ruleObserver, times(1)).apply(any());
     }
 
     @Test
     public void multi_condition_equal_numeric_not_equal_string() {
         rule.apply(createDefaultIngestionData(2, "test2"));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void multi_condition_not_equal_numeric_equal_string() {
         rule.apply(createDefaultIngestionData(3, "test"));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void multi_condition_not_equal_numeric_not_equal_string() {
         rule.apply(createDefaultIngestionData(3, "test2"));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void multi_condition_null_numeric_equal_string() {
         rule.apply(createDefaultIngestionData(null, "test"));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void multi_condition_equal_numeric_null_string() {
         rule.apply(createDefaultIngestionData(2, null));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void multi_condition_null_numeric_null_string() {
         rule.apply(createDefaultIngestionData(null, null));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
 }

@@ -2,7 +2,7 @@ package com.iot.rule.engine.domain;
 
 import com.iot.rule.engine.infra.LastReachedTimeRepository;
 import com.iot.rule.engine.infra.RuleRepository;
-import com.iot.rule.engine.infra.RuleObservableRepository;
+import com.iot.rule.engine.infra.RuleObserverRepository;
 import com.iot.rule.engine.infra.RuleEngineService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,32 +19,32 @@ public class UnsuccessRuleEngineServiceTest {
     private RuleEngineService ruleEngineService;
 
     private RuleRepository ruleRepository;
-    private RuleObservableRepository ruleObservableRepository;
+    private RuleObserverRepository ruleObserverRepository;
 
     private Condition condition;
-    private RuleObservable ruleObservable;
+    private RuleObserver ruleObserver;
     private LastReachedTimeRepository lastReachedTimeRepository;
 
     @BeforeEach
     public void setUp() {
 
         this.condition = mock(Condition.class);
-        this.ruleObservable = mock(RuleObservable.class);
+        this.ruleObserver = mock(RuleObserver.class);
 
         this.ruleRepository = mock(RuleRepository.class);
-        this.ruleObservableRepository = mock(RuleObservableRepository.class);
+        this.ruleObserverRepository = mock(RuleObserverRepository.class);
         this.lastReachedTimeRepository = mock(LastReachedTimeRepository.class);
 
         given(condition.apply(any())).willReturn(Boolean.FALSE);
 
         given(ruleRepository.findAllByCustomerIdAndDeviceId("customerId", "deviceId"))
                 .willReturn(Arrays.asList(new Rule("x", Arrays.asList(condition))));
-        given(ruleObservableRepository.findAllByRuleId(any()))
-                .willReturn(Arrays.asList(ruleObservable));
+        given(ruleObserverRepository.findAllByRuleId(any()))
+                .willReturn(Arrays.asList(ruleObserver));
 
         this.ruleEngineService = new RuleEngineServiceImpl(
                 ruleRepository,
-                ruleObservableRepository,
+                ruleObserverRepository,
                 lastReachedTimeRepository);
 
     }
@@ -54,9 +54,9 @@ public class UnsuccessRuleEngineServiceTest {
         this.ruleEngineService.applyRules(createNumericIngestionData(1));
 
         verify(this.ruleRepository, times(1)).findAllByCustomerIdAndDeviceId("customerId", "deviceId");
-        verify(this.ruleObservableRepository, times(1)).findAllByRuleId("x");
+        verify(this.ruleObserverRepository, times(1)).findAllByRuleId("x");
         verify(this.condition, times(1)).apply(any());
-        verify(this.ruleObservable, times(0)).apply(any());
+        verify(this.ruleObserver, times(0)).apply(any());
         verify(this.lastReachedTimeRepository, times(0)).findByRuleId(any());
 
     }

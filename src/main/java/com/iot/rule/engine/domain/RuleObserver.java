@@ -1,6 +1,6 @@
 package com.iot.rule.engine.domain;
 
-public interface RuleObservable {
+public interface RuleObserver {
 
     void apply(IngestionData data);
 

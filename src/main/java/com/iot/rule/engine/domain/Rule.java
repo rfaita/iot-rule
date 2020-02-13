@@ -10,24 +10,24 @@ public class Rule {
 
     private final String id;
     private final List<Condition> conditions;
-    private final List<RuleObservable> ruleObservables;
-    private final List<RuleBounceTimeObservable> ruleBounceTimeObservables;
+    private final List<RuleObserver> ruleObservers;
+    private final List<RuleBounceTimeObserver> ruleBounceTimeObservers;
     private final Second bounceTime;
     private Long lastReachedTime;
 
     public Rule(final String id, final List<Condition> conditions, Second bounceTime) {
         this.id = id;
         this.conditions = new ArrayList<>(conditions);
-        this.ruleObservables = new ArrayList<>();
-        this.ruleBounceTimeObservables = new ArrayList<>();
+        this.ruleObservers = new ArrayList<>();
+        this.ruleBounceTimeObservers = new ArrayList<>();
         this.bounceTime = bounceTime;
     }
 
     public Rule(final String id, final List<Condition> conditions) {
         this.id = id;
         this.conditions = new ArrayList<>(conditions);
-        this.ruleObservables = new ArrayList<>();
-        this.ruleBounceTimeObservables = new ArrayList<>();
+        this.ruleObservers = new ArrayList<>();
+        this.ruleBounceTimeObservers = new ArrayList<>();
         this.bounceTime = null;
     }
 
@@ -74,39 +74,39 @@ public class Rule {
     }
 
 
-    public Rule addBounceObservers(List<? extends RuleBounceTimeObservable> ruleBounceTimeObservables) {
-        if (ruleBounceTimeObservables != null) {
-            this.ruleBounceTimeObservables.addAll(ruleBounceTimeObservables);
+    public Rule addBounceObservers(List<? extends RuleBounceTimeObserver> ruleBounceTimeObservers) {
+        if (ruleBounceTimeObservers != null) {
+            this.ruleBounceTimeObservers.addAll(ruleBounceTimeObservers);
         }
         return this;
     }
 
-    public Rule addBounceObserver(RuleBounceTimeObservable ruleBounceTimeObservable) {
-        this.ruleBounceTimeObservables.add(ruleBounceTimeObservable);
+    public Rule addBounceObserver(RuleBounceTimeObserver ruleBounceTimeObserver) {
+        this.ruleBounceTimeObservers.add(ruleBounceTimeObserver);
         return this;
     }
 
 
     private void notifyBounceTimeObserves(Rule rule) {
-        this.ruleBounceTimeObservables
-                .forEach(ruleBounceTimeObservable -> ruleBounceTimeObservable.apply(rule));
+        this.ruleBounceTimeObservers
+                .forEach(ruleBounceTimeObserver -> ruleBounceTimeObserver.apply(rule));
     }
 
-    public Rule addObservers(List<? extends RuleObservable> ruleObservables) {
-        if (ruleObservables != null) {
-            this.ruleObservables.addAll(ruleObservables);
+    public Rule addObservers(List<? extends RuleObserver> ruleObservers) {
+        if (ruleObservers != null) {
+            this.ruleObservers.addAll(ruleObservers);
         }
         return this;
     }
 
-    public Rule addObserver(RuleObservable ruleObservable) {
-        this.ruleObservables.add(ruleObservable);
+    public Rule addObserver(RuleObserver ruleObserver) {
+        this.ruleObservers.add(ruleObserver);
         return this;
     }
 
     private void notifyObserves(final IngestionData data) {
 
-        this.ruleObservables.forEach(ruleObservable -> ruleObservable.apply(data));
+        this.ruleObservers.forEach(ruleObserver -> ruleObserver.apply(data));
 
     }
 

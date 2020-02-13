@@ -1,23 +1,21 @@
 package com.iot.rule.engine.domain;
 
 import com.iot.rule.engine.infra.LastReachedTimeRepository;
-import com.iot.rule.engine.infra.RuleObservableRepository;
+import com.iot.rule.engine.infra.RuleObserverRepository;
 import com.iot.rule.engine.infra.RuleRepository;
 import com.iot.rule.engine.infra.RuleEngineService;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RuleEngineServiceImpl implements RuleEngineService {
 
     private final RuleRepository ruleRepository;
-    private final RuleObservableRepository notificationRepository;
+    private final RuleObserverRepository notificationRepository;
     private final LastReachedTimeRepository lastReachedTimeRepository;
     private final PersistentRuleBounceTimeObserver persistentRuleBounceTimeObserver;
 
     public RuleEngineServiceImpl(RuleRepository ruleRepository,
-                                 RuleObservableRepository notificationRepository,
+                                 RuleObserverRepository notificationRepository,
                                  LastReachedTimeRepository lastReachedTimeRepository) {
         this.ruleRepository = ruleRepository;
         this.notificationRepository = notificationRepository;

@@ -13,12 +13,12 @@ public class NotEqualsStringRuleTest {
 
     private Rule rule;
 
-    private RuleObservable ruleObservable;
+    private RuleObserver ruleObserver;
 
     @BeforeEach
     public void setUp() {
 
-        this.ruleObservable = mock(RuleObservable.class);
+        this.ruleObserver = mock(RuleObserver.class);
 
         Condition<String> condition =
                 Condition.<String>builder()
@@ -28,26 +28,26 @@ public class NotEqualsStringRuleTest {
                         .build();
 
         rule = new Rule("x", Arrays.asList(condition));
-        rule.addObserver(this.ruleObservable);
+        rule.addObserver(this.ruleObserver);
 
     }
 
     @Test
     public void apply_string_rule_equal_value() {
         rule.apply(IngestionDataHelper.createStringIngestionData("test"));
-        verify(ruleObservable, times(0)).apply(any());
+        verify(ruleObserver, times(0)).apply(any());
     }
 
     @Test
     public void apply_string_rule_not_equal_value() {
         rule.apply(IngestionDataHelper.createStringIngestionData("test2"));
-        verify(ruleObservable, times(1)).apply(any());
+        verify(ruleObserver, times(1)).apply(any());
     }
 
     @Test
     public void apply_string_rule_null_value() {
         rule.apply(IngestionDataHelper.createStringIngestionData(null));
-        verify(ruleObservable, times(1)).apply(any());
+        verify(ruleObserver, times(1)).apply(any());
     }
 
 
